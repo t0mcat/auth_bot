@@ -1,15 +1,7 @@
-"""
-TODO:
-    * Consolidate atheme command code
-    * Create config file with correct values (don't forget /xmlrpc on URL!)
-    * Clean up logging code
-    * consolidate HTTP requests code
-    * Catch Fault 15 (Invalid authcookie for this account)
-"""
-
 from twisted.words.protocols import irc
 from twisted.internet import reactor, protocol, threads
 from twisted.python import log
+import xmlrpclib as xmlrpc
 import sys
 
 class AuthBot:
