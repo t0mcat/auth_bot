@@ -20,13 +20,10 @@ class AuthBot:
         self.channels = config.get('auth_bot', 'channels').split(', ')
 
     def xmlrpc_auth(self):
-        try:
-            self.server = xmlrpc.Server(self.server_url)
-            result = self.server.atheme.login(self.nick, self.passwd)
+        self.server = xmlrpc.Server(self.server_url)
+        result = self.server.atheme.login(self.nick, self.passwd)
         
-            self.authcookie = result.authcookie
-        except xmlrpx.Fault as fault:
-            raise fault
+        self.authcookie = result.authcookie
 
     def xmlrpc_send_command(service_name, command_name, *parameters):
         try:
