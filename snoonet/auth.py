@@ -62,7 +62,7 @@ class AuthBot:
 	while not self.is_channel_registered(channel):
 		pass
 
-        self.server.atheme.command(self.authcookie, self.nick,'127.0.0.1','ChanServ', 'ftransfer', channel, user)
+	self.xmlrpc_send_command('ChanServ', 'ftransfer', channel, user)
         self.leave(channel)
     
     def validate_key(self, key):
