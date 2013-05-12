@@ -17,6 +17,7 @@ class AuthBot:
         self.config = config
         self.nick = config.get('auth_bot', 'nick')
         self.passwd = config.get('auth_bot', 'passwd')
+	self.source_ip = config.get('auth_bot', 'source_ip')
         self.channels = config.get('auth_bot', 'channels').split(', ')
 
     def xmlrpc_auth(self):
@@ -27,7 +28,7 @@ class AuthBot:
 
     def xmlrpc_send_command(service_name, command_name, *parameters):
         try:
-            result = self.server.atheme.command(self.authcookie, self.user, self.source_ip, service_name, command_name, *parameters)
+            result = self.server.atheme.command(self.authcookie, self.nick, self.source_ip, service_name, command_name, *parameters)
         except xmlrpc.Fault as fault:
             if fault.faultCode is 4:
                 return False
@@ -83,6 +84,8 @@ class AuthBot:
     def signedOn(self):
         for chan in self.channels:
             self.join(chan)
+
+	self.say('NickServ', 'IDENTIFY %s' % self.passwd)
 
         xmlrpc_auth()
 
