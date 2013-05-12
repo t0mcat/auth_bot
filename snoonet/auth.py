@@ -58,6 +58,10 @@ class AuthBot:
     def create_channel(self, channel, user):
         self.join(channel)
         self.say('ChanServ', 'REGISTER %s' %channel)
+
+	while not self.is_channel_registered(channel):
+		pass
+
         self.server.atheme.command(self.authcookie, self.nick,'127.0.0.1','ChanServ', 'ftransfer', channel, user)
         self.leave(channel)
     
