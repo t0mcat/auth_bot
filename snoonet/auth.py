@@ -13,11 +13,11 @@ class InvalidStatusCodeException(Exception):
 class AuthBot:
     got_Pong = True
 
-    def __init__(self):
+    def __init__(self, config, log):
         self.config = config
         self.nick = config.get('auth_bot', 'nick')
         self.passwd = config.get('auth_bot', 'passwd')
-	self.source_ip = config.get('auth_bot', 'source_ip')
+        self.source_ip = config.get('auth_bot', 'source_ip')
         self.channels = config.get('auth_bot', 'channels').split(', ')
 
     def xmlrpc_auth(self):
@@ -59,10 +59,12 @@ class AuthBot:
         self.join(channel)
         self.say('ChanServ', 'REGISTER %s' %channel)
 
-	while not self.is_channel_registered(channel):
-		pass
+        while not self.is_channel_registered(channel):
+            pass
 
-	self.xmlrpc_send_command('ChanServ', 'ftransfer', channel, user)
+        self.log.msg('Transfering ownership of %s to %s.' % (channel, user))
+        self.xmlrpc_send_command('ChanServ', 'ftransfer', channel, user)
+
         self.leave(channel)
     
     def validate_key(self, key):
@@ -87,9 +89,10 @@ class AuthBot:
 
     def signedOn(self):
         for chan in self.channels:
+        self.log.msg('joining %s.' % chan) 
             self.join(chan)
 
-	self.say('NickServ', 'IDENTIFY %s' % self.passwd)
+    self.say('NickServ', 'IDENTIFY %s' % self.passwd)
 
         xmlrpc_auth()
 
@@ -120,44 +123,57 @@ class AuthBot:
         if action is not "subreddit_access":
             self.say(user, "Invalid action in first argument.")
             return
+
+        self.log.msg('subreddit_access request received from %s.' % user)
+
         try:
             if not self.is_key_valid(key):
+                self.log.msg('Key not properly formed.')
                 self.say(user, "Key not properly formed.")
                 return
 
             if not self.is_user_registered(user):
+                self.log.msg('You are not registered.')
                 self.say(user, "You are not registered.")
                 return
 
             self.process_auth(user, channel, key)
 
         except InvalidStatusCodeException, requests.RequestException) as api_exception:
+            self.log.err()
             self.say(user, "Error communicating with Snoonet REST API.")
             raise api_exception
         except xmlrpc.Fault as fault:
+            self.log.err()
             self.say(user, "Error communicating with Atheme services.")
             raise fault
         except:
+            log.err()
             self.say(user, "Unknown error.")
             raise
 
     def privmsg(self, user, channel, msg):
         if channel == self.nick:
+            self.log.msg('Received whisper from %s' % user)      
             self.process_whisper(user, msg)
 
 class AuthBotFactory(protocol.ClientFactory):
-    def __init__(self, config):
+    def __init__(self, config, log):
         self.config = config
+    self.log = log
 
     def buildProtocol(self, addr):
-        return AuthBot(self.config)
+        return AuthBot(self.config, self.log)
 
     def clientConnectionLost(self, connector, reason):
+        self.log.msg('Connection lost.')
+        self.log.msg(reason)
         connector.connect()
 
     def clientConnectionFailed(self, connector, reason):
-        reactor.stop()
-        raise Exception('Connection failed: %s' % reason)
+        self.log.msg('Connection failed.')
+        self.log.msg(reason)
+        connector.connect()
 
 def start_auth_bot():
     log.startLogging(sys.stdout)
