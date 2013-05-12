@@ -36,3 +36,6 @@ nosetests.xml
 
 # virtualenv
 ENV
+
+# Real config file
+auth_bot.cfg
