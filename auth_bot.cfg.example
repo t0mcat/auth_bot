@@ -1,0 +1,9 @@
+[auth_bot]
+nick = BOT_NICKNAME
+passwd = BOT_PASSWORD
+channels = #CHAN1, #CHAN2, #CHAN3  
+source_ip = SOURCE_IP #the IP used to determine the source of the xmlrpc requests
+api_url = localhost:8000 #hostname and port of the snoonet API
+
+irc_server = IRC_SERVER_HOSTNAME
+irc_server_port = IRC_SERVER_PORT
