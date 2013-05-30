@@ -68,7 +68,7 @@ class AuthBot(irc.IRCClient):
         return self.xmlrpc_send_command('chanserv', 'info', channel)
 
     def set_user_channel_modes(self, user, channel, modes):
-        self.msg('operserv', str('mode %s +%s %s' %(channel, modes, user)))
+        return self.xmlrpc_send_command('chanserv', 'FFLAGS', channel, '%s %s' % (user, modes))
 
     def create_channel(self, channel, user):
         #current race condition exists here when multiple users request the same channel simultaneously
