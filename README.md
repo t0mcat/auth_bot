@@ -11,3 +11,6 @@ Create a file name auth_bot.cfg and fill it with the correct information as outl
     auth_bot
 
 Output goes to stdout.
+
+##License
+See LICENSE.txt (spoiler: it's [GPL 3.0](http://www.gnu.org/licenses/gpl-3.0.txt)).

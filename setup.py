@@ -8,6 +8,7 @@ setup(
     author = "t0mcat",
     author_email = "diminoten@snoonet.org",
     url = "https://github.com/t0mcat/auth_bot",
+    license = "LICENSE.txt",
     entry_points = {
             'console_scripts':[
                 'auth_bot = snoonet.auth:start_auth_bot'
