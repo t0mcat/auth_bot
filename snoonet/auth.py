@@ -35,6 +35,9 @@ class AuthBot(irc.IRCClient):
         
         self.log.msg("XMLRPC auth complete. Result: %s" % result)
 
+        if len(result) != 20:
+            raise Exception("Error authing with XMLRPC.")
+
         self.authcookie = result
 
     def xmlrpc_send_command(self, service_name, command_name, *parameters):
@@ -190,7 +193,7 @@ class AuthBot(irc.IRCClient):
             self.msg(user, "Error communicating with Atheme services.")
             raise fault
         except:
-            log.err()
+            self.log.err()
             self.msg(user, "Unknown error.")
             raise
 
