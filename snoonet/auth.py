@@ -49,7 +49,7 @@ class AuthBot(irc.IRCClient):
                 self.xmlrpc_auth()
                 self.xmlrpc_send_command(service_name, command_name, *parameters)
             elif fault.faultCode is 12:
-                pass
+                return "Already in requested state."
             else:
                 raise fault
 
@@ -66,7 +66,12 @@ class AuthBot(irc.IRCClient):
         return self.xmlrpc_send_command('chanserv', 'info', channel)
 
     def set_user_channel_modes(self, user, channel, modes):
-        return self.xmlrpc_send_command('chanserv', 'FFLAGS', channel, user, modes)
+        response = self.xmlrpc_send_command('chanserv', 'FFLAGS', channel, user, modes)
+        if isinstance(response, str):
+            self.msg(user, "You already have operator access to the channel. If you are having problems or if you have any questions, type /join #help and let a staff member know.")
+            return True
+
+        return response
 
     def create_channel(self, channel, user):
         #current race condition exists here when multiple users request the same channel simultaneously
