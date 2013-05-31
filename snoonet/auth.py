@@ -98,7 +98,7 @@ class AuthBot(irc.IRCClient):
                for user in self.channels_to_give[channel]:
                    self.log.msg('starting ftransfer of channel %s to user %s' % (channel, user))
                    self.xmlrpc_send_command('ChanServ', 'ftransfer', channel, user)
-                   self.msg(user, ":)")
+                   self.msg(user, "You've successfully been granted operator access to {0}. To join, type /join {0}. If you have any questions, type /join #help, ask your question(s),  and someone will gladly provide assistance.".format(channel))
 
     def validate_key(self, key):
         return self._rest_communicate('/', key)        
