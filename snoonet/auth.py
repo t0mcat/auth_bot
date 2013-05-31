@@ -53,8 +53,6 @@ class AuthBot(irc.IRCClient):
             else:
                 raise fault
 
-        self.log.msg(result) 
-
         return True
 
     def is_key_valid(self, key):
