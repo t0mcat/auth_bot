@@ -1,11 +1,11 @@
 [auth_bot]
- nick = NICKNAME
- passwd = PASSWORD
- channels = #CHANNEL
- source_ip = 127.0.0.1
- api_url = API_URL 
+nick = NICKNAME
+passwd = PASSWORD
+channels = #CHANNEL
+source_ip = 127.0.0.1
+api_url = API_URL 
 
- irc_server = IRC_SERVER
- irc_server_port = IRC_SERVER_PORT
- xmlrpc_server = XMLRPC_SERVER
- xmlrpc_server_port = XMLRPC_PORT
+irc_server = IRC_SERVER
+irc_server_port = IRC_SERVER_PORT
+xmlrpc_server = XMLRPC_SERVER
+xmlrpc_server_port = XMLRPC_PORT
